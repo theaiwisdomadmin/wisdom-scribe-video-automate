@@ -1,5 +1,6 @@
 # Renders a video every time you push a change inside videos/<name>/,
 # or on demand from the Actions tab ("Run workflow" → type the folder name).
+# Each video gets its own download: <name>.mp4 (plain MP4, not zipped) and <name>-review (preview + report).
 name: Render videos
 on:
   push:
@@ -11,36 +12,55 @@ on:
         required: true
 
 jobs:
-  render:
+  find:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    outputs:
+      folders: ${{ steps.f.outputs.folders }}
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+      - id: f
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          ONE: ${{ github.event.inputs.folder }}
+        run: |
+          if [ -n "$ONE" ]; then echo "folders=[\"$ONE\"]" >> "$GITHUB_OUTPUT"; exit 0; fi
+          base="$BASE_SHA"; if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then base=HEAD~1; fi
+          list=$(git diff --name-only "$base" HEAD -- videos | cut -d/ -f2 | sort -u | while read d; do [ -f "videos/$d/storyboard.js" ] && echo "$d"; done | python3 -c 'import sys,json;print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
+          echo "folders=$list" >> "$GITHUB_OUTPUT"; echo "to render: $list"
+
+  render:
+    needs: find
+    if: needs.find.outputs.folders != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        folder: ${{ fromJson(needs.find.outputs.folders) }}
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - name: Install tools
         run: |
           pip install playwright pillow
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-          sudo apt-get install -y -qq fonts-noto-color-emoji
       - name: Build and render
-        env:
-          CHROME_PATH: /usr/bin/google-chrome
-          BASE_SHA: ${{ github.event.before }}
-        run: |
-          if [ -n "${{ github.event.inputs.folder }}" ]; then
-            python scribe.py make "videos/${{ github.event.inputs.folder }}"
-          else
-            python scribe.py make --changed
-          fi
-      - name: Upload videos
-        uses: actions/upload-artifact@v4
+        env: { CHROME_PATH: /usr/bin/google-chrome }
+        run: python scribe.py make "videos/${{ matrix.folder }}"
+      - name: Upload MP4
+        uses: actions/upload-artifact@v7
         with:
-          name: videos
+          path: out/${{ matrix.folder }}.mp4
+          archive: false
+          retention-days: 7
+      - name: Upload preview and report
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.folder }}-review
           path: |
-            out/*.mp4
-            videos/*/preview.png
-            videos/*/report.txt
-          if-no-files-found: warn
+            videos/${{ matrix.folder }}/preview.png
+            videos/${{ matrix.folder }}/report.txt
           retention-days: 7
