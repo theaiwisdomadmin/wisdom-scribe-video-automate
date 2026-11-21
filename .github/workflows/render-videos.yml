@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 2 }
+        with: { fetch-depth: 0 }
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - name: Install tools
@@ -25,7 +25,9 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           sudo apt-get install -y -qq fonts-noto-color-emoji
       - name: Build and render
-        env: { CHROME_PATH: /usr/bin/google-chrome }
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+          BASE_SHA: ${{ github.event.before }}
         run: |
           if [ -n "${{ github.event.inputs.folder }}" ]; then
             python scribe.py make "videos/${{ github.event.inputs.folder }}"

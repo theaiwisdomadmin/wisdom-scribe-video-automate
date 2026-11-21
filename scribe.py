@@ -238,7 +238,10 @@ def mix_audio(folder: Path, silent: Path, out: Path, total: float):
 # ----------------------------------------------------------------------------- cli
 def changed_folders():
     try:
-        names = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'], capture_output=True, text=True, check=True).stdout.split()
+        base = os.environ.get('BASE_SHA', '')
+        if not base or set(base) == {'0'} or subprocess.run(['git', 'cat-file', '-e', base + '^{commit}'], capture_output=True).returncode:
+            base = 'HEAD~1'   # first push of a branch, or base not available
+        names = subprocess.run(['git', 'diff', '--name-only', base, 'HEAD'], capture_output=True, text=True, check=True).stdout.split()
     except Exception:
         return []
     found = []
@@ -253,7 +256,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('command', choices=['build', 'render', 'make'])
     ap.add_argument('folder', nargs='?', help='video folder, e.g. videos/my-video')
-    ap.add_argument('--changed', action='store_true', help='process video folders changed in the last git commit')
+    ap.add_argument('--changed', action='store_true', help='process video folders changed since BASE_SHA (default: the last commit)')
     ap.add_argument('--res', type=int, help='1080 (default), 720 or 1440')
     ap.add_argument('--fps', type=int, help='30 (default)')
     ap.add_argument('--out', help='output MP4 path (default out/<folder>.mp4)')
