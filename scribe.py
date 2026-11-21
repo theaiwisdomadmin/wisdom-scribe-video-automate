@@ -216,10 +216,13 @@ def find_audio(folder: Path, stem: str):
 def mix_audio(folder: Path, silent: Path, out: Path, total: float):
     cfg = json.loads((folder / 'video.json').read_text()) if (folder / 'video.json').exists() else {}
     voice, music = find_audio(folder, 'voiceover'), find_audio(folder, 'music')
-    if not voice and not music:
-        shutil.move(silent, out); return
     if not shutil.which('ffmpeg'):
         log('WARNING: ffmpeg not found — saving the video without audio'); shutil.move(silent, out); return
+    if not voice and not music:
+        # standard MP4 with a silent audio track: Canva, Instagram and YouTube all accept this
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(silent), '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
+                        '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', str(out)], check=True)
+        silent.unlink(missing_ok=True); return
     cmd = ['ffmpeg', '-y', '-loglevel', 'error', '-i', str(silent)]
     filters, labels, idx = [], [], 1
     if voice:
