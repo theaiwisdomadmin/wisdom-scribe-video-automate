@@ -2,6 +2,9 @@
 # or on demand from the Actions tab ("Run workflow" → type the folder name).
 # Each video gets its own download: <name>.mp4 (plain MP4, not zipped) and <name>-review (preview + report).
 name: Render videos
+permissions:
+  contents: write
+  actions: read
 on:
   push:
     paths: ['videos/**']
@@ -56,6 +59,11 @@ jobs:
           path: out/${{ matrix.folder }}.mp4
           archive: false
           retention-days: 7
+      - name: Save the MP4 to branch renders/${{ matrix.folder }} (for Claude to send to Canva)
+        run: |
+          d=$(mktemp -d); cp "out/${{ matrix.folder }}.mp4" "$d/"; cd "$d"
+          git init -q -b main && git add . && git -c user.name=renderer -c user.email=renderer@users.noreply.github.com commit -qm "render ${{ matrix.folder }} (${{ github.sha }})"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "main:refs/heads/renders/${{ matrix.folder }}"
       - name: Upload preview and report
         uses: actions/upload-artifact@v7
         with:
