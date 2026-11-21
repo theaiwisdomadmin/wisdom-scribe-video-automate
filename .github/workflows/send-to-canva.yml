@@ -18,12 +18,12 @@ jobs:
     steps:
       - name: Hide the upload link in logs
         run: echo "::add-mask::${{ github.event.inputs.upload_url }}"
-      - uses: actions/download-artifact@v5
-        with:
-          name: ${{ github.event.inputs.video }}.mp4
-          run-id: ${{ github.event.inputs.run_id }}
-          github-token: ${{ github.token }}
-          path: dl
+      - name: Download the MP4
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          id=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.event.inputs.run_id }}/artifacts" --jq '.artifacts[] | select(.name == "${{ github.event.inputs.video }}.mp4") | .id')
+          mkdir -p dl && curl -sSfL -H "Authorization: Bearer $GH_TOKEN" -o "dl/${{ github.event.inputs.video }}.mp4" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$id/zip"
+          file dl/*.mp4
       - name: Upload to Canva
         env: { URL: '${{ github.event.inputs.upload_url }}' }
         run: |
