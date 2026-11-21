@@ -1,0 +1,76 @@
+reel-gemini-textbooks: 73 elements, 14 scenes, 64.0s (script ends 62.0s)
+
+  cue    start  drift  element
+   0.0    0.0   +0.0  [gemini-icon.png]
+   1.1    1.1   +0.0  [gemini-notebook.png]
+   3.2    3.2   +0.0  [openbook]
+   4.0    4.0   +0.0  a REAL
+   5.2    5.2   +0.0  [gift]
+   5.6    5.6   +0.0  100% FREE!
+   6.0    7.6   +1.6  [clock]
+   6.8    8.0   +1.2  60 seconds
+   9.8    9.8   +0.0  [openbook]
+  10.2   10.2   +0.0  Tonight's
+  11.1   11.1   +0.0  [arrowright]
+  11.5   11.5   +0.0  [clipboard]
+  11.9   11.9   +0.0  Quiz
+  12.3   12.3   +0.0  [arrowloop]
+  12.8   12.8   +0.0  ...that points back
+  14.0   14.7   +0.7  [gemini-icon.png]
+  15.4   15.4   +0.0  Google's
+  15.8   15.8   +0.0  [sparkle]
+  16.9   16.9   +0.0  [sparkle]
+  17.8   18.9   +1.1  [books.jpg]
+  18.7   19.3   +0.6  Hundreds of
+  19.1   19.7   +0.6  [highlight]
+  19.9   20.1   +0.2  incl. books from India's
+  21.4   21.4   +0.0  [schand.png]
+  22.7   23.4   +0.7  The BEST part
+  24.1   24.1   +0.0  [chats]
+  24.5   24.5   +0.0  Every answer...
+  25.6   25.6   +0.0  [openbook]
+  26.0   26.0   +0.0  ...comes from
+  27.2   27.2   +0.0  [link]
+  28.4   28.4   +0.0  + a link to the
+  30.4   30.4   +0.0  Here's how
+  31.2   31.2   +0.0  5 quick steps
+  31.6   31.6   +0.0  [pointer]
+  32.3   33.5   +1.2  STEP 1
+  33.4   33.9   +0.5  [kid-studied.svg]
+  34.0   34.3   +0.3  Read the
+  35.1   36.3   +1.1  STEP 2
+  35.5   36.7   +1.1  [addsrc.jpg]
+  37.1   37.1   +0.0  [circle]
+  37.5   37.5   +0.0  [pointer]
+  37.9   37.9   +0.0  Tap "Add sources"
+  38.3   39.8   +1.5  STEP 3
+  38.7   40.2   +1.5  [textbooks.jpg]
+  39.6   40.6   +1.0  [circle]
+  40.0   41.0   +1.0  [pointer]
+  40.7   41.4   +0.7  [select.jpg]
+  42.0   42.0   +0.0  [circle]
+  42.4   42.4   +0.0  Textbooks → add the book
+  42.8   44.4   +1.6  STEP 4
+  43.2   44.8   +1.6  [typing.jpg]
+  43.6   45.1   +1.6  [circle]
+  44.0   45.5   +1.6  [leaf]
+  44.4   46.0   +1.6  [quizq.jpg]
+  46.5   47.9   +1.4  STEP 5
+  47.3   48.3   +1.0  [student-notes.svg]
+  47.9   48.7   +0.8  Answer on paper
+  48.6   50.6   +2.1  [cross]
+  49.3   51.0   +1.8  Wrong answer?
+  50.3   51.5   +1.1  [sources.jpg]
+  50.7   51.9   +1.1  [circle]
+  51.5   52.2   +0.7  [pointer]
+  51.9   52.6   +0.7  [bookpage.jpg]
+  52.8   53.0   +0.3  Re-read the page!
+  54.0   55.0   +1.0  [bookmark]
+  54.4   55.4   +1.0  SAVE this
+  55.9   55.9   +0.0  for the next
+  56.3   56.3   +0.0  [clipboard]
+  57.0   58.2   +1.2  [send]
+  58.1   58.6   +0.6  Send it to
+  58.5   59.0   +0.6  [share.svg]
+  58.9   59.4   +0.6  [worried-parent.svg]
+  60.1   60.1   +0.0  who worries where

@@ -1,0 +1,4 @@
+0:00 Google's Gemini Notebook now lets your child study from a real textbook, for free. In the next sixty seconds, I'll show you how to turn tonight's chapter into a quiz that points back to the page.
+0:14 Gemini Notebook is Google's study app. It now has hundreds of free textbooks, including books from India's S Chand. And the best part: every answer comes from the book itself, with a link to the part it came from.
+0:30 Now, here's how you can use it. Let your child read the chapter first. Then open Gemini Notebook, tap Add sources, choose Textbooks, and add a book for that subject. Type: quiz me on photosynthesis, or whatever the chapter was. Your child answers on paper. For every wrong answer, tap the citation and re-read that part of the book.
+0:54 Save this for your child's next unit test. And send it to one parent who worries about where AI answers come from.

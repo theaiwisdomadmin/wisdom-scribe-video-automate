@@ -1,0 +1,43 @@
+# Renders a video every time you push a change inside videos/<name>/,
+# or on demand from the Actions tab ("Run workflow" → type the folder name).
+name: Render videos
+on:
+  push:
+    paths: ['videos/**']
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: 'Video folder to render (e.g. reel-gemini-textbooks)'
+        required: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Install tools
+        run: |
+          pip install playwright pillow
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          sudo apt-get install -y -qq fonts-noto-color-emoji
+      - name: Build and render
+        env: { CHROME_PATH: /usr/bin/google-chrome }
+        run: |
+          if [ -n "${{ github.event.inputs.folder }}" ]; then
+            python scribe.py make "videos/${{ github.event.inputs.folder }}"
+          else
+            python scribe.py make --changed
+          fi
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos
+          path: |
+            out/*.mp4
+            videos/*/preview.png
+            videos/*/report.txt
+          if-no-files-found: warn
