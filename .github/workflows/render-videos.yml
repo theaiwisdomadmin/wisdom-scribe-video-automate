@@ -41,3 +41,4 @@ jobs:
             videos/*/preview.png
             videos/*/report.txt
           if-no-files-found: warn
+          retention-days: 7

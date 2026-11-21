@@ -19,7 +19,7 @@ videos/
 3. Open the repository's **Actions** tab → *Render videos*. In 3–5 minutes the run shows a **videos** download with the MP4, a preview sheet and a timing report.
    To re-render without changes: Actions → Render videos → **Run workflow** → type the folder name.
 
-Free accounts get 2,000 minutes a month on private repositories (unlimited on public ones). A 1-minute reel uses about 2 minutes, a 5-minute video about 6.
+Cost: free on a public repository. On a private one, GitHub Free includes $12 of runner time a month (about 2,000 Linux minutes); a 1-minute reel uses about 3. Downloads are kept 7 days so they stay inside the free 500 MB of storage — save the MP4s you want to keep.
 
 ## Option B — on your own computer
 Needs Python 3 and Google Chrome (ffmpeg only if you add audio).
