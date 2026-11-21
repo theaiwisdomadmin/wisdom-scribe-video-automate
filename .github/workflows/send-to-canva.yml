@@ -1,0 +1,33 @@
+# Sends a rendered MP4 to Canva. Claude starts this with a one-time Canva upload link (valid ~30 min).
+name: Send video to Canva
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:   { description: 'Render run ID that produced the video', required: true }
+      video:    { description: 'Video folder name, e.g. reel-gemini-textbooks', required: true }
+      upload_url: { description: 'One-time Canva upload link', required: true }
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Hide the upload link in logs
+        run: echo "::add-mask::${{ github.event.inputs.upload_url }}"
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ github.event.inputs.video }}.mp4
+          run-id: ${{ github.event.inputs.run_id }}
+          github-token: ${{ github.token }}
+          path: dl
+      - name: Upload to Canva
+        env: { URL: '${{ github.event.inputs.upload_url }}' }
+        run: |
+          f=$(find dl -name '*.mp4' | head -1); ls -la "$f"
+          code=$(curl -sS -o resp.json -w '%{http_code}' -X POST -H 'Content-Type: application/octet-stream' --data-binary @"$f" "$URL")
+          echo "HTTP $code"; cat resp.json; echo
+          [ "$code" -lt 300 ]
