@@ -71,7 +71,7 @@ window.ScribeStoryboard = function (SCRIPT, ASSETS, CONFIG, STORY) {
   const HI = (seg, cue, x, y, w, h, o = {}) => push(seg, cue, o, () => { const el = makeIcon('highlight', { x, y, w, h, color: o.color || C.YELLOW, iconStyle: 'line', stretch: true, useFill: true, fill: o.color || C.YELLOW, strokeWidth: 0.01,
     anim: anim(o, { autoDur: false, dur: 0.5, enter: 'wipe' }) }); el.blend = 'multiply'; return el; });
   // Placeholder box for artwork that has not arrived yet (orange dashed box; listed in the report).
-  const NEED = (seg, cue, label, x, y, w, h, o = {}) => { missing.push(label); push(seg, cue, o, () => { const id = 'need_' + missing.length; P.assets[id] = { kind: 'svg', name: 'NEEDED — ' + label, data: box('NEEDED', label, w, h) };
+  const NEED = (seg, cue, label, x, y, w, h, o = {}) => { missing.push(label); const id = 'need_' + missing.length; push(seg, cue, o, () => { P.assets[id] = { kind: 'svg', name: 'NEEDED — ' + label, data: box('NEEDED', label, w, h) };
     const el = { id: uid(), type: 'svg', assetId: id, x, y, w, h, rot: 0, opacity: 1 }; el.anim = defAnim(anim(o, { enter: 'draw', dur: 1.2, autoDur: false })); return el; }); };
   // Editor-only note that keeps the board empty (e.g. where a recorded clip will go). Hidden in the export.
   const GUIDE = (seg, cue, text, o = {}) => push(seg, cue, Object.assign({ scene: true }, o), () => { const el = makeText({ text, font: 'Poppins', size: 110, color: '#64748b', cx: W / 2, cy: H / 2, anim: anim(Object.assign({ scene: true }, o), { enter: 'instant' }) }); el.guide = true; return el; });
